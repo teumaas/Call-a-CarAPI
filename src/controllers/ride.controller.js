@@ -64,7 +64,7 @@ module.exports = {
 
   async cancelRide(req, res, next) {
     try {
-      const ride = Ride.findOneAndUpdate(
+      const ride = await Ride.findOneAndUpdate(
         { _id: req.params.id },
         { status: "Cancel" }
       );
