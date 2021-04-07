@@ -64,7 +64,8 @@ module.exports = {
 
   cancelRide(req, res, next) {
     Ride.findOneAndUpdate({ _id: req.params.id }, { status: "Cancel" })
-      .then((result) => res.status(200).json({ result }).end())
+      .then(() => Ride.findById({ _id: req.params.id }))
+      .then(result => res.status(200).json(result).end())
       .catch(next(new ApiError("RidesError", "Can't cancel status.", 422)));
   },
 };
