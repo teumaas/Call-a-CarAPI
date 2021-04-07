@@ -3,9 +3,9 @@ const routes = Router();
 const userController = require('../controllers/user.controller');
 const { IsAdmin, verifyUserToken } = require("../middlewares/auth.middleware");
 
-routes.post('/user/register', userController.register);
-routes.get("/user", verifyUserToken, IsAdmin,  userController.getAll);
-routes.post('/user/login', userController.login);
-routes.get("/user/profile", verifyUserToken, userController.getUser);
+routes.post('/users/register', userController.register);
+routes.get("/users", verifyUserToken, IsAdmin,  userController.getAll);
+routes.post('/users/login', userController.login);
+routes.get("/users/profile", verifyUserToken, userController.getUser);
 
 module.exports = routes;
