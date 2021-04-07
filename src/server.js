@@ -5,6 +5,7 @@ const express = require("express");
 const morgan = require("morgan"); //HTTP request logger
 const bodyParser = require("body-parser"); //Pase request body to JSON
 const cors = require("cors"); // Access control
+const sampleData = require("./database/sample.data.database")
 const mongoose = require("mongoose");
 const ApiError = require("./models/error.model");
 
@@ -34,8 +35,13 @@ mongoose
     process.exit();
   });
 
+// sampleData.loadCarTypes();
+// sampleData.loadCar();
+
 const userRoute = require("./routes/user.route");
-app.use("/", userRoute);
+const rideRoute = require("./routes/ride.route");
+const carRoute = require("./routes/car.route");
+app.use("/", userRoute, rideRoute, carRoute);
 
 app.use("*", function (req, res, next) {
   next(new ApiError("Endpoint not found", 404));
@@ -49,3 +55,5 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(port, () => console.log(`Server is running on port: ${port}`));
+
+

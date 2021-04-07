@@ -64,6 +64,10 @@ const UserSchema = mongoose.Schema(
     },
     resetPasswordExpires: {
         type: Date
+    },
+    payByFingerprintToken: {
+        type: Boolean,
+        default: false
     }
   },
   { versionKey: false }

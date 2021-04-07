@@ -1,5 +1,5 @@
 const ApiError = require("../models/error.model");
-const User = require("../models/user.schema");
+const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -96,15 +96,16 @@ module.exports = {
    */
 
   async getUser(req, res, next) {
-    const user = await User.findOne({ _id: req.params.id });
-
-    if (user) {
-      res.status(200).json({ user }).end();
-    } else if (
-      (await !mongoose.Types.ObjectId.isValid(req.params.id)) ||
-      !user
-    ) {
-      next(new ApiError("FindUserError", "User not found.", 404));
-    }
+    const user = await User.findOne({ _id: req.user.user._id });
+    res.status(200).json({ user }).end();
   },
+
+
+  // async updatePayment(req, res, next) {
+  //   const user = await User.findOne({ _id: req.user.user._id });
+
+  //   user
+
+  //   res.status(200).json({ user }).end();
+  // },
 };
