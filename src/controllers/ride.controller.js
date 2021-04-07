@@ -32,7 +32,7 @@ module.exports = {
         dateTime,
       });
 
-      res.status(200).json({ ride  }).end();
+      res.status(200).json({ ride }).end();
     } catch {
       next(new ApiError("RideError", "Error while planning ride.", 422));
     }
@@ -67,8 +67,9 @@ module.exports = {
       const ride = await Ride.findOneAndUpdate(
         { _id: req.params.id },
         { status: "Cancel" }
-      );
-      res.status(200).json({ ride }).end();
+      ).then();
+      const result = await Ride.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
     } catch {
       next(new ApiError("RidesError", "Can't cancel status.", 422));
     }
