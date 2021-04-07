@@ -40,11 +40,12 @@ module.exports = {
 
   async putRide(req, res, next) {
     try {
-      const ride = await Ride.findOneAndUpdate(
+      await Ride.findOneAndUpdate(
         { _id: req.params.id },
         { status: req.body.status }
       );
-      await res.status(200).json({ ride }).end();
+      const result = await Ride.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
     } catch {
       next(new ApiError("RidesError", "Can't update status.", 422));
     }
@@ -52,11 +53,12 @@ module.exports = {
 
   async payRideById(req, res, next) {
     try {
-      const ride = await Ride.findOneAndUpdate(
+      await Ride.findOneAndUpdate(
         { _id: req.params.id },
         { paymentFulfilled: true }
       );
-      await res.status(200).json({ ride }).end();
+      const result = await Ride.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
     } catch {
       next(new ApiError("RidesError", "Can't complete payment.", 422));
     }
@@ -64,10 +66,10 @@ module.exports = {
 
   async cancelRide(req, res, next) {
     try {
-      const ride = await Ride.findOneAndUpdate(
+      await Ride.findOneAndUpdate(
         { _id: req.params.id },
-        { status: "Cancel" }
-      ).then();
+        { status: "Canceled" }
+      );
       const result = await Ride.findOne({ _id: req.params.id });
       res.status(200).json({ result }).end();
     } catch {
