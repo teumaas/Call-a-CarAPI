@@ -1,5 +1,4 @@
 const ApiError = require("../models/error.model");
-const Mock = require("../mocks/db.mock");
 const Car = require("../models/car.model");
 const CarType = require("../models/car.type.model");
 
