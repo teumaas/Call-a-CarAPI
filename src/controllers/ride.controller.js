@@ -62,15 +62,9 @@ module.exports = {
     }
   },
 
-  async cancelRide(req, res, next) {
-    try {
-      const ride = await Ride.findOneAndUpdate(
-        { _id: req.params.id },
-        { status: "Cancel" }
-      );
-      await res.status(200).json({ ride }).end();
-    } catch {
-      next(new ApiError("RidesError", "Can't cancel status.", 422));
-    }
+  cancelRide(req, res, next) {
+    Ride.findOneAndUpdate({ _id: req.params.id }, { status: "Cancel" })
+      .then((result) => res.status(200).json({ result }).end())
+      .catch(next(new ApiError("RidesError", "Can't cancel status.", 422)));
   },
 };
