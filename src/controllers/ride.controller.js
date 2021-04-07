@@ -61,4 +61,16 @@ module.exports = {
       next(new ApiError("RidesError", "Can't complete payment.", 422));
     }
   },
+
+  async cancelRide(req, res, next) {
+    try {
+      const ride = await Ride.findOneAndUpdate(
+        { _id: req.params.id },
+        { status: "Cancel" }
+      );
+      await res.status(200).json({ ride }).end();
+    } catch {
+      next(new ApiError("RidesError", "Can't cancel status.", 422));
+    }
+  },
 };

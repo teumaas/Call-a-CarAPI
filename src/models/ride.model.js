@@ -29,6 +29,7 @@ const RideSchema = mongoose.Schema(
             "Driving to customer",
             "Transporting customer",
             "Complete",
+            "Canceled"
           ],
         },
       ],
