@@ -26,13 +26,13 @@ module.exports = {
     const { car, dateTime } = req.body;
 
     try {
-      await Ride.create({
+      const ride = await Ride.create({
         car,
         person,
         dateTime,
       });
 
-      res.status(200).json({ message: "Ride is successfully planned." }).end();
+      res.status(200).json({ ride }).end();
     } catch {
       next(new ApiError("RideError", "Error while planning ride.", 422));
     }
