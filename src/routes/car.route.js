@@ -4,6 +4,6 @@ const carController = require('../controllers/car.controller');
 const { IsAdmin, verifyUserToken } = require("../middlewares/auth.middleware");
 
 routes.get("/cars", verifyUserToken, carController.getCars);
-routes.get("/cars/type", verifyUserToken, carController.getCartypes);
+routes.get("/cars/types", verifyUserToken, carController.getCartypes);
 
 module.exports = routes;
