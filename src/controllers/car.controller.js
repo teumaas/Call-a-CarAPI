@@ -11,11 +11,15 @@ module.exports = {
 
   async getCars(req, res, next) {
     try {
-        const cars = await Car.find().populate({ path: 'car', model: 'Car', select: { '_id': 1, 'typeName': 1, 'pricePerKm': 1} })
-        await res.status(200).json({ cars }).end();
+      const cars = await Car.find().populate({
+        path: "car",
+        model: "Car",
+        select: { _id: 1, typeName: 1, pricePerKm: 1 },
+      });
+      await res.status(200).json({ cars }).end();
     } catch {
-        next(new ApiError("CarsError", "Can't get cars.", 422));
-    }    
+      res.status(422).json({ CarsError: "Can't get cars." }).end();
+    }
   },
 
   /**
@@ -26,10 +30,10 @@ module.exports = {
 
   async getCartypes(req, res, next) {
     try {
-        const carTypes = await CarType.find()
-        await res.status(200).json({ carTypes }).end();
+      const carTypes = await CarType.find();
+      await res.status(200).json({ carTypes }).end();
     } catch {
-        next(new ApiError("CarsError", "Can't get cartypes.", 422));
-    }   
+      res.status(422).json({ CarsError: "Can't get cartypes." }).end();
+    }
   },
 };

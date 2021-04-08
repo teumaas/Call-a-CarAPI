@@ -3,5 +3,6 @@ module.exports = class ErrorMessage {
     this.type = type;
     this.message = message;
     this.status = status;
+
   }
 };

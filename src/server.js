@@ -44,7 +44,7 @@ const carRoute = require("./routes/car.route");
 app.use("/", userRoute, rideRoute, carRoute);
 
 app.use("*", function (req, res, next) {
-  next(new ApiError("Endpoint not found", 404));
+  res.status(402).json({ EndpointError: "Endpoint not found"}).end();
 });
 
 app.use(function (err, req, res, next) {

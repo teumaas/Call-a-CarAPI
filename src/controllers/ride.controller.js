@@ -17,7 +17,7 @@ module.exports = {
       });
       res.status(200).json({ rides }).end();
     } catch {
-      next(new ApiError("RidesError", "Can't get rides.", 422));
+      res.status(422).json({ RidesError: "Can't get rides." }).end();
     }
   },
 
@@ -34,7 +34,7 @@ module.exports = {
 
       res.status(200).json({ ride }).end();
     } catch {
-      next(new ApiError("RideError", "Error while planning ride.", 422));
+      res.status(422).json({ RidesError: "Error while planning ride." }).end();
     }
   },
 
@@ -47,7 +47,7 @@ module.exports = {
       const result = await Ride.findOne({ _id: req.params.id });
       res.status(200).json({ result }).end();
     } catch {
-      next(new ApiError("RidesError", "Can't update status.", 422));
+      res.status(422).json({ RidesError: "Can't update status." }).end();
     }
   },
 
@@ -60,7 +60,7 @@ module.exports = {
       const result = await Ride.findOne({ _id: req.params.id });
       res.status(200).json({ result }).end();
     } catch {
-      next(new ApiError("RidesError", "Can't complete payment.", 422));
+      res.status(422).json({ RidesError: "Can't complete payment." }).end();
     }
   },
 
@@ -73,7 +73,7 @@ module.exports = {
       const result = await Ride.findOne({ _id: req.params.id });
       res.status(200).json({ result }).end();
     } catch {
-      next(new ApiError("RidesError", "Can't cancel status.", 422));
+      res.status(422).json({ RidesError: "Can't cancel status." }).end();
     }
   },
 };
