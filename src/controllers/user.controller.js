@@ -41,7 +41,10 @@ module.exports = {
         .json({ message: "User is successfully registerd." })
         .end();
     } else {
-      res.status(422).json({ RegisterError: "User is already registered." }).end();
+      res
+        .status(422)
+        .json({ RegisterError: "User is already registered." })
+        .end();
     }
   },
 
@@ -58,7 +61,10 @@ module.exports = {
     }).catch();
 
     if (!user) {
-      res.status(422).json({ LoginError: "Invalid email and/or password." }).end();
+      res
+        .status(422)
+        .json({ LoginError: "Invalid email and/or password." })
+        .end();
     }
 
     if (bcrypt.compareSync(password, user.password)) {
@@ -73,7 +79,10 @@ module.exports = {
         .json({ token_type: token_type, expires_in: expires_in, access_token })
         .end();
     } else {
-      res.status(422).json({ LoginError: "Invalid email and/or password." }).end();
+      res
+        .status(422)
+        .json({ LoginError: "Invalid email and/or password." })
+        .end();
     }
   },
 
@@ -84,9 +93,32 @@ module.exports = {
    */
 
   async getAll(req, res, next) {
-    const usersNotShared = await User.find({shareData: { $eq: false }}, {firstName: 1, lastName: 1, email: 1, roles: 1, shareData: 1, payByFingerprintToken: 1})
-    const usersShared = await User.find({shareData: { $eq: true }}, {firstName: 1, lastName: 1, email: 1, phoneNumber :1, address: 1, zipCode: 1, roles: 1, shareData: 1, payByFingerprintToken: 1})
-    res.status(200).json({ usersNotShared, usersShared}).end();
+    const usersNotShared = await User.find(
+      { shareData: { $eq: false } },
+      {
+        firstName: 1,
+        lastName: 1,
+        email: 1,
+        roles: 1,
+        shareData: 1,
+        payByFingerprintToken: 1,
+      }
+    );
+    const usersShared = await User.find(
+      { shareData: { $eq: true } },
+      {
+        firstName: 1,
+        lastName: 1,
+        email: 1,
+        phoneNumber: 1,
+        address: 1,
+        zipCode: 1,
+        roles: 1,
+        shareData: 1,
+        payByFingerprintToken: 1,
+      }
+    );
+    res.status(200).json({ usersNotShared, usersShared }).end();
   },
 
   /**
@@ -96,10 +128,22 @@ module.exports = {
    */
 
   async getUser(req, res, next) {
-    const user = await User.find({ _id: req.user.user._id }, {firstName: 1, lastName: 1, email: 1, phoneNumber :1, address: 1, zipCode: 1, roles: 1, shareData: 1, payByFingerprintToken: 1})
+    const user = await User.find(
+      { _id: req.user.user._id },
+      {
+        firstName: 1,
+        lastName: 1,
+        email: 1,
+        phoneNumber: 1,
+        address: 1,
+        zipCode: 1,
+        roles: 1,
+        shareData: 1,
+        payByFingerprintToken: 1,
+      }
+    );
     res.status(200).json({ user }).end();
   },
-
 
   async updatePayment(req, res, next) {
     try {
@@ -108,10 +152,59 @@ module.exports = {
         { payByFingerprintToken: true }
       );
 
-      const result = await User.find({ _id: req.user.user._id }, {firstName: 1, lastName: 1, email: 1, phoneNumber :1, address: 1, zipCode: 1, roles: 1, shareData: 1, payByFingerprintToken: 1})
-      res.status(200).json({ result }).end();
+      const user = await User.find(
+        { _id: req.user.user._id },
+        {
+          firstName: 1,
+          lastName: 1,
+          email: 1,
+          phoneNumber: 1,
+          address: 1,
+          zipCode: 1,
+          roles: 1,
+          shareData: 1,
+          payByFingerprintToken: 1,
+        }
+      );
+      res.status(200).json({ user }).end();
     } catch {
-      res.status(422).json({ UpdatePayment: "Can't set token" }).end();
+      res.status(422).json({ UpdatePayment: "Can't set token." }).end();
+    }
+  },
+
+  async updateUser(req, res, next) {
+    const params = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      address: req.body.address,
+      zipCode: req.body.zipCode,
+      shareData: req.body.shareData,
+    };
+    
+    try {
+      for (let prop in params) if (!params[prop]) delete params[prop];
+
+      await User.findOneAndUpdate({ _id: req.user.user._id }, params);
+
+      const user = await User.find(
+        { _id: req.user.user._id },
+        {
+          firstName: 1,
+          lastName: 1,
+          email: 1,
+          phoneNumber: 1,
+          address: 1,
+          zipCode: 1,
+          roles: 1,
+          shareData: 1,
+          payByFingerprintToken: 1,
+        }
+      );
+      res.status(200).json({ user }).end();
+    } catch {
+      res.status(422).json({ UpdateUser: "Can't update user." }).end();
     }
   },
 };
