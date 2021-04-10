@@ -9,6 +9,19 @@ module.exports = {
    * @param {*} next ApiError when id is invalid.
    */
 
+  async getRides(req, res, next) {
+    try {
+      const rides = await Ride.find({}).populate({
+        path: "car",
+        model: "Car",
+        select: {},
+      });
+      res.status(200).json({ rides }).end();
+    } catch {
+      res.status(422).json({ RidesError: "Can't get rides." }).end();
+    }
+  },
+
   async getRidesById(req, res, next) {
     try {
       const rides = await Ride.find({ person: req.user.user._id }).populate({
@@ -24,7 +37,14 @@ module.exports = {
 
   async postRide(req, res, next) {
     const person = req.user.user._id;
-    const { car, dateTime, pickupAddress, pickupZipcode, destinationAddress, destinationZipcode } = req.body;
+    const {
+      car,
+      dateTime,
+      pickupAddress,
+      pickupZipcode,
+      destinationAddress,
+      destinationZipcode,
+    } = req.body;
 
     try {
       const ride = await Ride.create({
@@ -38,11 +58,9 @@ module.exports = {
       });
 
       res.status(200).json({ ride }).end();
-    } catch (err){
+    } catch (err) {
       res.status(400).json({ RidesError: err.body }).end();
       console.log(err);
-    
-      
     }
   },
 
@@ -86,12 +104,9 @@ module.exports = {
   },
 
   async setLock(req, res, next) {
-    const { isLocked } = req.body
+    const { isLocked } = req.body;
     try {
-      await Ride.findOneAndUpdate(
-        { _id: req.params.id },
-        { isLocked }
-      );
+      await Ride.findOneAndUpdate({ _id: req.params.id }, { isLocked });
       const result = await Ride.findOne({ _id: req.params.id });
       res.status(200).json({ result }).end();
     } catch {
