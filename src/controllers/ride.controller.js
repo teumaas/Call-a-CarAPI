@@ -9,7 +9,7 @@ module.exports = {
    * @param {*} next ApiError when id is invalid.
    */
 
-  async getRides(req, res, next) {
+  async getRidesById(req, res, next) {
     try {
       const rides = await Ride.find({ person: req.user.user._id }).populate({
         path: "car",
@@ -82,6 +82,20 @@ module.exports = {
       res.status(200).json({ result }).end();
     } catch {
       res.status(422).json({ RidesError: "Can't cancel status." }).end();
+    }
+  },
+
+  async setLock(req, res, next) {
+    const { isLocked } = req.body
+    try {
+      await Ride.findOneAndUpdate(
+        { _id: req.params.id },
+        { isLocked }
+      );
+      const result = await Ride.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
+    } catch {
+      res.status(422).json({ RidesError: "Can't set lock state." }).end();
     }
   },
 };

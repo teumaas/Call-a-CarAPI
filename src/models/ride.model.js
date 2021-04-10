@@ -37,22 +37,26 @@ const RideSchema = mongoose.Schema(
     },
     paymentFulfilled: {
       type: Boolean,
-      default: false,
+      required: false,
     },
     pickupAddress: {
       type: String,
-      default: true,
+      required: true,
     },
     pickupZipcode: {
       type: String,
-      default: true,
+      required: true,
     },
     destinationAddress: {
       type: String,
-      default: true,
+      required: true,
     },
     destinationZipcode: {
       type: String,
+      required: true,
+    },
+    isLocked: {
+      type: Boolean,
       default: true,
     },
   },
