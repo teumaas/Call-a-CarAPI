@@ -38,7 +38,7 @@ const RideSchema = mongoose.Schema(
     paymentFulfilled: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
     pickupAddress: {
       type: String,
