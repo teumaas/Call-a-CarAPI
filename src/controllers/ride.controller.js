@@ -1,3 +1,4 @@
+const e = require("express");
 const ApiError = require("../models/error.model");
 const Ride = require("../models/ride.model");
 
@@ -23,18 +24,25 @@ module.exports = {
 
   async postRide(req, res, next) {
     const person = req.user.user._id;
-    const { car, dateTime } = req.body;
+    const { car, dateTime, pickupAddress, pickupZipcode, destinationAddress, destinationZipcode } = req.body;
 
     try {
       const ride = await Ride.create({
         car,
         person,
         dateTime,
+        pickupAddress,
+        pickupZipcode,
+        destinationAddress,
+        destinationZipcode,
       });
 
       res.status(200).json({ ride }).end();
-    } catch {
-      res.status(422).json({ RidesError: "Error while planning ride." }).end();
+    } catch (err){
+      res.status(400).json({ RidesError: err.body }).end();
+      console.log(err);
+    
+      
     }
   },
 

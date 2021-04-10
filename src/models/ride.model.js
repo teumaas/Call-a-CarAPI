@@ -39,6 +39,22 @@ const RideSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    pickupAddress: {
+      type: String,
+      default: true,
+    },
+    pickupZipcode: {
+      type: String,
+      default: true,
+    },
+    destinationAddress: {
+      type: String,
+      default: true,
+    },
+    destinationZipcode: {
+      type: String,
+      default: true,
+    },
   },
   { versionKey: false }
 );

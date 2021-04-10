@@ -20,6 +20,7 @@ module.exports = {
       zipCode,
       shareData,
       password,
+      payByFingerprintToken,
     } = req.body;
 
     const user = await User.findOne({ email: email });
@@ -34,11 +35,12 @@ module.exports = {
         zipCode,
         shareData,
         password,
+        payByFingerprintToken
       }).catch(next);
 
       res
         .status(200)
-        .json({ message: "User is successfully registerd." })
+        .json({ message: "User is successfully registered." })
         .end();
     } else {
       res
@@ -181,6 +183,7 @@ module.exports = {
       address: req.body.address,
       zipCode: req.body.zipCode,
       shareData: req.body.shareData,
+      payByFingerprintToken: req.body.payByFingerprintToken,
     };
     
     try {
