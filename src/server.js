@@ -8,6 +8,8 @@ const cors = require("cors"); // Access control
 const sampleData = require("./database/sample.data.database")
 const mongoose = require("mongoose");
 const ApiError = require("./models/error.model");
+const schedule = require('node-schedule');
+const axios = require('axios');
 
 const app = express();
 
@@ -38,10 +40,34 @@ mongoose
 // sampleData.loadCarTypes();
 // sampleData.loadCar();
 
+
+
+schedule.scheduleJob('* * * * 1', async function(){
+  try {
+    const incidents = await Incident.find({});
+
+    axios.post('overheid.nl/api/sendIncident', {
+      incidents
+    })
+    .then(function (response) {
+      console.log(response);
+      console.log("Data has been send.");
+    })
+    .catch(function (error) {
+      console.log(error);
+      console.log("Problem with sending data.")
+    });
+
+  } catch {
+    res.status(422).json({ IncidentsError: "Can't get incidents." }).end();
+  }
+});
+
 const userRoute = require("./routes/user.route");
 const rideRoute = require("./routes/ride.route");
 const carRoute = require("./routes/car.route");
-app.use("/", userRoute, rideRoute, carRoute);
+const incidentRoute = require("./routes/incident.route");
+app.use("/", userRoute, rideRoute, carRoute, incidentRoute);
 
 app.use("*", function (req, res, next) {
   res.status(402).json({ EndpointError: "Endpoint not found"}).end();
