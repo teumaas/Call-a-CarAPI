@@ -17,7 +17,7 @@ const IncidentSchema = mongoose.Schema(
     },
     date: {
         type: Date,
-        default: Date.now
+        required: true,
     },
   },
   { versionKey: false }

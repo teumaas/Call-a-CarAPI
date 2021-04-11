@@ -24,7 +24,7 @@ module.exports = {
 
   async getCarByID(req, res, next) {
     try {
-      const car = await Car.find({ _id: req.params.id });
+      const car = await Car.findById( req.params.id );
       await res.status(200).json({ car }).end();
     } catch {
       res.status(422).json({ CarError: "Can't get car." }).end();
@@ -60,19 +60,19 @@ module.exports = {
    * @param {*} next ApiError when id is invalid.
    */
 
-  async getCartypes(req, res, next) {
+  async getCarTypes(req, res, next) {
     try {
       const carTypes = await CarType.find();
       await res.status(200).json({ carTypes }).end();
     } catch {
-      res.status(422).json({ CarsError: "Can't get cartypes." }).end();
+      res.status(422).json({ CarsError: "Can't get carTypes." }).end();
     }
   },
 
 
   async getCarTypeByID(req, res, next) {
     try {
-      const carType = await CarType.find({ _id: req.params.id });
+      const carType = await CarType.findById( req.params.id );
       await res.status(200).json({ carType }).end();
     } catch {
       res.status(422).json({ CarError: "Can't get carType." }).end();

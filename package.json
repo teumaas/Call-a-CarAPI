@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "express-kun": "^1.0.24",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.3.2",
     "mongoose": "^5.12.3",
     "morgan": "^1.10.0",
     "node-schedule": "^2.0.0",
