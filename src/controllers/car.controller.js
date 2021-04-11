@@ -18,9 +18,41 @@ module.exports = {
       });
       await res.status(200).json({ cars }).end();
     } catch {
-      res.status(422).json({ CarsError: "Can't get cars." }).end();
+      res.status(422).json({ CarError: "Can't get cars." }).end();
     }
   },
+
+  async getCarByID(req, res, next) {
+    try {
+      const car = await Car.find({ _id: req.params.id });
+      await res.status(200).json({ car }).end();
+    } catch {
+      res.status(422).json({ CarError: "Can't get car." }).end();
+    }
+  },
+
+  async putCarByID(req, res, next) {
+    const params = {
+      model: req.body.model,
+      brand: req.body.brand,
+      type: req.body.type,
+      entryDate: req.body.entryDate
+    };
+
+    try {
+      for (let prop in params) if (!params[prop]) delete params[prop];
+
+      await Car.findOneAndUpdate(
+        { _id: req.params.id },
+        { params }
+      );
+      const result = await Car.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
+    } catch {
+      res.status(422).json({ CarError: "Can't update car." }).end();
+    }
+  },
+
 
   /**
    * @param {*} req The incoming request.
@@ -34,6 +66,36 @@ module.exports = {
       await res.status(200).json({ carTypes }).end();
     } catch {
       res.status(422).json({ CarsError: "Can't get cartypes." }).end();
+    }
+  },
+
+
+  async getCarTypeByID(req, res, next) {
+    try {
+      const carType = await CarType.find({ _id: req.params.id });
+      await res.status(200).json({ carType }).end();
+    } catch {
+      res.status(422).json({ CarError: "Can't get carType." }).end();
+    }
+  },
+
+  async putCarTypeByID(req, res, next) {
+    const params = {
+      typeName: req.body.typeName,
+      pricePerKm: req.body.pricePerKm,
+    };
+
+    try {
+      for (let prop in params) if (!params[prop]) delete params[prop];
+
+      await CarType.findOneAndUpdate(
+        { _id: req.params.id },
+        { params }
+      );
+      const result = await CarType.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
+    } catch {
+      res.status(422).json({ CarError: "Can't update car." }).end();
     }
   },
 };

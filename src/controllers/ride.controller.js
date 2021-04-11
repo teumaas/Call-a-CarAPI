@@ -21,6 +21,19 @@ module.exports = {
     }
   },
 
+  async getRidesByUserId(req, res, next) {
+    try {
+      const rides = await Ride.find({ person: req.params.id }).populate({
+        path: "car",
+        model: "Car",
+        select: {},
+      });
+      res.status(200).json({ rides }).end();
+    } catch {
+      res.status(422).json({ RidesError: "Can't get rides." }).end();
+    }
+  },
+
   async getRidesById(req, res, next) {
     try {
       const rides = await Ride.find({ person: req.user.user._id }).populate({
@@ -60,6 +73,27 @@ module.exports = {
     } catch (err) {
       res.status(400).json({ RidesError: err.body }).end();
       console.log(err);
+    }
+  },
+
+  async putRideByID(req, res, next) {
+    const params = {
+      status: req.body.status,
+      distanceInKm: req.body.distanceInKm,
+      isLocked: req.body.isLocked
+    };
+
+    try {
+      for (let prop in params) if (!params[prop]) delete params[prop];
+
+      await Ride.findOneAndUpdate(
+        { _id: req.params.id },
+        { params }
+      );
+      const result = await Ride.findOne({ _id: req.params.id });
+      res.status(200).json({ result }).end();
+    } catch {
+      res.status(422).json({ RidesError: "Can't update status." }).end();
     }
   },
 

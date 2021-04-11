@@ -18,6 +18,15 @@ module.exports = {
     }
   },
 
+  async getIncidentsByID(req, res, next) {
+    try {
+      const incidents = await Incident.find({ _id: req.params.id });
+      res.status(200).json({ incidents }).end();
+    } catch {
+      res.status(422).json({ IncidentsError: "Can't get incidents." }).end();
+    }
+  },
+
   async postIncident(req, res, next) {
     const {
       ride,

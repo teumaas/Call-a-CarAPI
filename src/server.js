@@ -10,6 +10,8 @@ const mongoose = require("mongoose");
 const ApiError = require("./models/error.model");
 const schedule = require('node-schedule');
 const axios = require('axios');
+const swaggerUi = require('swagger-ui-express');
+// const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
@@ -68,6 +70,8 @@ const rideRoute = require("./routes/ride.route");
 const carRoute = require("./routes/car.route");
 const incidentRoute = require("./routes/incident.route");
 app.use("/", userRoute, rideRoute, carRoute, incidentRoute);
+// app.use('/api-docs', swaggerUi.serve);
+// app.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.use("*", function (req, res, next) {
   res.status(402).json({ EndpointError: "Endpoint not found"}).end();

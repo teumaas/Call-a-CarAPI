@@ -147,6 +147,24 @@ module.exports = {
     res.status(200).json({ user }).end();
   },
 
+  async getUserByID(req, res, next) {
+    const user = await User.find(
+      { _id: req.params.id },
+      {
+        firstName: 1,
+        lastName: 1,
+        email: 1,
+        phoneNumber: 1,
+        address: 1,
+        zipCode: 1,
+        roles: 1,
+        shareData: 1,
+        payByFingerprintToken: 1,
+      }
+    );
+    res.status(200).json({ user }).end();
+  },
+
   async updatePayment(req, res, next) {
     try {
       await User.findOneAndUpdate(
