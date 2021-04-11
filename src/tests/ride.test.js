@@ -64,7 +64,6 @@ describe("Tests for the /rides endpoint.", () => {
       .set("Authorization", `Bearer ${bearerUser}`)
       .send(ride)
       .end((err, res) => {
-        //console.log(res)
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('errors');
