@@ -4,8 +4,8 @@
   "description": "Call-a-Car API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "SET NODE_ENV=development & nodemon ./src/server.js"
+    "test": "SET NODE_ENV=test&& nodemon --exec mocha ./src/tests --recursive",
+    "start": "SET NODE_ENV=development&& nodemon ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,8 @@
     "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
