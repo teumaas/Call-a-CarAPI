@@ -74,11 +74,12 @@ module.exports = {
         email: email,
         password: password,
       });
-
+      console.log(post.data);
       return post.data;
     } catch (err) {
       // Handle Error Here
       console.error(err);
     }
   },
+
 };

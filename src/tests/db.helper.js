@@ -41,12 +41,25 @@ beforeEach((done) => {
     users
       .drop()
       .then(() => {
-        sampleData.createUser("user@website.com", "password", "admin");
-        sampleData.createUser("user2@website.com", "password", "user");
+        console.log("Reached 1");
+        sampleData.createUser("user@website.com", "1234", "admin");
+      })
+      .then(() =>{
+        console.log("Reached 2");
+        sampleData.createUser("user2@website.com", "1234", "user");
+      })
+      .then(() =>{
+        console.log("Reached 3");
         sampleData.loadCar();
+      })
+      .then(() =>{
+        console.log("Reached 4");
         sampleData.loadCarTypes();
       })
       .then(() => done())
+      .catch(() => done())
+      .catch(() => done())
+      .catch(() => done())
       .catch(() => done())
       .catch(() => done())
   );
