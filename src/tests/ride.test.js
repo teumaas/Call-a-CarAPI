@@ -140,25 +140,4 @@ describe("Tests for the /rides endpoint.", () => {
         });
     })
   });
-
-  it("Get /rides with no token account", (done) => {
-    const bearerUser = sampleData.loginUser(
-      "user@website.com",
-      "1234",
-      "http://localhost:4000/users/login"
-    ).then(() => {
-      chai
-        .request(server)
-        .get("/rides")
-        .set("Authorization", "Bearer ")
-        .end((err, res) => {
-          res.should.have.status(402);
-          res.body.should.be.a('object');
-          done();
-        });
-    })
-  });
-
-
-
 });
