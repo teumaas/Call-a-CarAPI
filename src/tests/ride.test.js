@@ -42,19 +42,8 @@ chai.use(chaiHttp);
 // });
 
 describe("Tests for the /rides endpoint.", () => {
-  let token = "";
 
-  let userLogin = sampleData.loginUser(
-    "user2@website.com",
-    "password",
-    "http://localhost:4000/users/login"
-  ).then((result) => {
-    token = result;
-  })
-
-  console.log(token)
-
-  const bearerAdminUser = sampleData.loginUser(
+  const bearerUser = sampleData.loginUser(
     "user@website.com",
     "password",
     "http://localhost:4000/users/login"
