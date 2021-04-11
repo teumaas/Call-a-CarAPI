@@ -80,7 +80,7 @@ describe("Tests for the /rides endpoint.", () => {
       "http://localhost:4000/users/login"
     ).then(() => {
       let ride = {
-        car: carOneID,
+        car: carTwoID,
         dateTime: new Date().toISOString(),
       };
       chai
@@ -94,6 +94,55 @@ describe("Tests for the /rides endpoint.", () => {
           done();
         });
     })
-    
   });
+
+  it("Post to /rides with missing Authorization header returns Unauthorized error", (done) => {
+    const bearerUser = sampleData.loginUser(
+      "user@website.com",
+      "1234",
+      "http://localhost:4000/users/login"
+    ).then(() => {
+      let ride = {
+        car: carOneID,
+        dateTime: new Date().toISOString(),
+      };
+      chai
+        .request(server)
+        .post("/rides")
+        .send(ride)
+        .end((err, res) => {
+          res.should.have.status(422);
+          res.body.should.be.a('object');
+          done();
+        });
+    })
+  });
+
+  it("Post to /rides with non-existant Car ID returns error", (done) => {
+    const bearerUser = sampleData.loginUser(
+      "user@website.com",
+      "1234",
+      "http://localhost:4000/users/login"
+    ).then(() => {
+      let ride = {
+        car: invalidID,
+        dateTime: new Date().toISOString(),
+      };
+      chai
+        .request(server)
+        .post("/rides")
+        .set("Authorization", "Bearer " + token)
+        .send(ride)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    })
+  });
+
+  
+
+
+
 });
