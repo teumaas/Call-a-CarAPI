@@ -10,8 +10,8 @@ const ApiError = require("./models/error.model");
 const schedule = require("node-schedule");
 const axios = require("axios");
 const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 const sampleData = require("./database/sample.data.database");
-// const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
@@ -22,9 +22,37 @@ app.use(cors("*"));
 app.use(express.json());
 app.use(morgan("dev"));
 
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: "Call-a-Car",
+      version: "1.0.0",
+      description:
+        "This is documentation for the Call-a-Car REST API built with Express+MongDB.",
+    },
+    basePath: "/api/v1",
+    components: {
+      securitySchemes: {
+        ApiKeyAuth: {
+          type: "apiKey",
+          in: "header",
+          bearerFormat: "X-API-Key",
+        },
+      },
+    },
+    openapi: "3.0.0",
+  },
+  apis: ["./src/routes/*.js"], // Path to the API docs
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve);
+app.get("/api-docs", swaggerUi.setup(swaggerDocs));
+
 //MongoDB database connection
 
-if ((process.env.NODE_ENV) !== 'test')
+if (process.env.NODE_ENV !== "test")
   // MongoDB
   mongoose
     .connect(databaseString, {
@@ -70,8 +98,6 @@ const rideRoute = require("./routes/ride.route");
 const carRoute = require("./routes/car.route");
 const incidentRoute = require("./routes/incident.route");
 app.use("/", userRoute, rideRoute, carRoute, incidentRoute);
-// app.use('/api-docs', swaggerUi.serve);
-// app.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 app.use("*", function (req, res, next) {
   res.status(402).json({ EndpointError: "Endpoint not found" }).end();

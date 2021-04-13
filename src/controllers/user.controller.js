@@ -26,22 +26,26 @@ module.exports = {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      await User.create({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        address,
-        zipCode,
-        shareData,
-        password,
-        payByFingerprintToken
-      }).catch(next);
+      try {
+        await User.create({
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          address,
+          zipCode,
+          shareData,
+          password,
+          payByFingerprintToken,
+        });
 
-      res
-        .status(200)
-        .json({ message: "User is successfully registered." })
-        .end();
+        res
+          .status(200)
+          .json({ message: "User is successfully registered." })
+          .end();
+      } catch (error) {
+        return res.status(402).json(error).end();
+      }
     } else {
       res
         .status(422)
@@ -203,7 +207,7 @@ module.exports = {
       shareData: req.body.shareData,
       payByFingerprintToken: req.body.payByFingerprintToken,
     };
-    
+
     try {
       for (let prop in params) if (!params[prop]) delete params[prop];
 
