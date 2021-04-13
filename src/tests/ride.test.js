@@ -137,9 +137,4 @@ describe("Tests for the /rides endpoint.", () => {
         });
     })
   });
-
-  
-
-
-
 });
