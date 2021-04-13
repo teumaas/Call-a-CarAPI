@@ -35,6 +35,42 @@ describe("Tests for the /rides endpoint.", () => {
         
       });
 
+      it("Post to /users/register with missing values returns error", (done) => {
+        chai
+          .request(server)
+          .post("/users/register")
+          .send({
+              "firstName": "Freddy",
+              "shareData": "true",
+              "phoneNumber": "0600000000",
+              "address": "Teststraat 34",
+              "zipCode": "4040AA",
+              "password": "1234"
+          })
+          .end((err, res) => {
+            res.should.have.status(500);
+            res.body.should.be.a('object');
+            done();
+          });
+      
+    });
+
+      it("Post to /users/login with invalid credentials returns 422 error", (done) => {
+        chai
+          .request(server)
+          .post("/users/login")
+            .send({
+                "email": "freddy@kruger.nl",
+                "password": "21231"
+            })
+          .end((err, res) => {
+            res.should.have.status(422);
+            res.body.should.be.a('object');
+            done();
+          });
+      
+    });
+
       it("Post to /users/ logs in a User after Registering", (done) => {
         chai
             .request(server)
