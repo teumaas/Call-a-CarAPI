@@ -20,7 +20,7 @@ const port = "4000";
 
 app.use(cors("*"));
 app.use(express.json());
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 app.use(express.urlencoded());
 
 const swaggerOptions = {
@@ -34,10 +34,10 @@ const swaggerOptions = {
     basePath: "/api/v1",
     components: {
       securitySchemes: {
-        ApiKeyAuth: {
-          type: "apiKey",
-          in: "header",
-          bearerFormat: "X-API-Key",
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
@@ -45,6 +45,9 @@ const swaggerOptions = {
   },
   apis: ["./src/routes/*.js"], // Path to the API docs
 };
+
+
+
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 

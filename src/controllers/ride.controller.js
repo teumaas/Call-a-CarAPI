@@ -71,8 +71,7 @@ module.exports = {
 
       res.status(200).json({ ride }).end();
     } catch (err) {
-      res.status(400).json({ RidesError: err.body }).end();
-      console.log(err);
+      res.status(400).json({ RidesError: err.message }).end();
     }
   },
 
@@ -80,16 +79,14 @@ module.exports = {
     const params = {
       status: req.body.status,
       distanceInKm: req.body.distanceInKm,
-      isLocked: req.body.isLocked
+      isLocked: req.body.isLocked,
     };
 
     try {
       for (let prop in params) if (!params[prop]) delete params[prop];
 
-      await Ride.findOneAndUpdate(
-        { _id: req.params.id },
-        { params }
-      );
+      await Ride.findOneAndUpdate({ _id: req.params.id }, { params });
+
       const result = await Ride.findOne({ _id: req.params.id });
       res.status(200).json({ result }).end();
     } catch {
@@ -99,20 +96,50 @@ module.exports = {
 
   async putRide(req, res, next) {
     const params = {
-      status: req.body.status,
+      car: req.body.car,
+      person: req.body.person,
+      dateTime: req.body.dateTime,
       distanceInKm: req.body.distanceInKm,
-      isLocked: req.body.isLocked
+      status: req.body.status,
+      paymentFulfilled: req.body.paymentFulfilled,
+      pickupAddress: req.body.pickupAddress,
+      pickupZipcode: req.body.pickupZipcode,
+      destinationAddress: req.body.destinationAddress,
+      destinationZipcode: req.body.destinationZipcode,
+      isLocked: req.body.isLocked,
     };
 
     try {
       for (let prop in params) if (!params[prop]) delete params[prop];
 
-      await Ride.findOneAndUpdate(
-        { _id: req.params.id },
-        { params }
-      );
-      const result = await Ride.findOne({ _id: req.params.id });
-      res.status(200).json({ result }).end();
+      if (req.user.user.roles == "user")
+        Ride.findOneAndUpdate(
+          { _id: req.params.id, person: req.user.user._id },
+          { $set: params }
+        ).then((result) => {
+          if(!result)
+           return res.status(422).json({ RidesError: "Can't find ride." }).end();
+
+          Ride.findOne({
+            _id: result._id,
+            person: req.user.user._id,
+          }).then((result) => {
+            res.status(200).json({ result }).end();
+          });
+        });
+
+      if (req.user.user.roles == "admin")
+        Ride.findOneAndUpdate({ _id: req.params.id }, { $set: params })
+          .then((result) => {
+            if(!result)
+            return res.status(422).json({ RidesError: "Can't find ride." }).end();
+
+            Ride.findOne({
+              _id: result._id,
+            }).then((result) => {
+              res.status(200).json({ result }).end();
+            });
+          })
     } catch {
       res.status(422).json({ RidesError: "Can't update status." }).end();
     }
