@@ -44,6 +44,7 @@ module.exports = {
           .json({ message: "User is successfully registered." })
           .end();
       } catch (error) {
+        console.log(error)
         return res.status(402).json(error).end();
       }
     } else {
